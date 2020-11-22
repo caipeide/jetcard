@@ -2,7 +2,7 @@
 
 set -e
 
-password='jetson'
+password=$1 # the password used for remote connection to this car.
 
 # Record the time this script starts
 date
@@ -21,24 +21,40 @@ sudo usermod -aG i2c $USER
 # Install pip and some python dependencies
 echo "\e[104m Install pip and some python dependencies \e[0m"
 sudo apt-get update
-sudo apt install -y python3-pip python3-pil python3-smbus python3-matplotlib cmake
+sudo apt install -y python3-pip python3-pil python3-smbus python3-matplotlib cmake build-essential python3-dev python3-pandas python3-h5py libhdf5-serial-dev hdf5-tools nano ntp
 sudo -H pip3 install --upgrade pip
 sudo -H pip3 install flask
 sudo -H pip3 install --upgrade numpy
 
+# Install torch2trt for model acceleration
+echo "\e[100m Install torch2trt for model acceleration \e[0m"
+cd
+git clone https://github.com/NVIDIA-AI-IOT/torch2trt 
+cd torch2trt 
+sudo python3 setup.py install
+cd ../
+
+# Install ohmyzsh and zsh-autosuggestions
+echo "\e[100m Install ohmyzsh \e[0m"
+sudo apt install zsh
+yes Yes y | sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+sed -i "$[ 71 ]c plugins=(git zsh-autosuggestions)" ~/.zshrc
+
+
+# Tune the IMX219 camera
+# reference: https://www.waveshare.com/wiki/IMX219-160_Camera
+echo "\e[100m Tuning the camera \e[0m"
+cd
+wget https://www.waveshare.com/w/upload/e/eb/Camera_overrides.tar.gz
+tar zxvf Camera_overrides.tar.gz 
+sudo cp camera_overrides.isp /var/nvidia/nvcam/settings/
+sudo chmod 664 /var/nvidia/nvcam/settings/camera_overrides.isp
+sudo chown root:root /var/nvidia/nvcam/settings/camera_overrides.isp
+
 # Install jtop
 echo "\e[100m Install jtop \e[0m"
 sudo -H pip install jetson-stats 
-
-
-# Install the pre-built TensorFlow pip wheel
-echo "\e[48;5;202m Install the pre-built TensorFlow pip wheel \e[0m"
-sudo apt-get update
-sudo apt-get install -y libhdf5-serial-dev hdf5-tools libhdf5-dev zlib1g-dev zip libjpeg8-dev
-sudo apt-get install -y python3-pip
-sudo -H pip3 install -U pip setuptools
-sudo -H pip3 install -U numpy grpcio absl-py py-cpuinfo psutil portpicker six mock requests gast h5py astor termcolor protobuf keras-applications keras-preprocessing wrapt google-pasta
-sudo -H pip3 install --pre --extra-index-url https://developer.download.nvidia.com/compute/redist/jp/v43 tensorflow==1.15.2+nv20.3
 
 # Install the pre-built PyTorch pip wheel 
 echo "\e[45m Install the pre-built PyTorch pip wheel  \e[0m"
@@ -58,14 +74,6 @@ sudo -H python3 setup.py install
 cd  ../
 pip install 'pillow<7'
 
-# setup Jetson.GPIO
-#echo "\e[100m Install torchvision package \e[0m"
-#sudo groupadd -f -r gpio
-#sudo -S usermod -a -G gpio $USER
-#sudo cp /opt/nvidia/jetson-gpio/etc/99-gpio.rules /etc/udev/rules.d/
-#sudo udevadm control --reload-rules
-#sudo udevadm trigger
-
 # Install traitlets (master, to support the unlink() method)
 echo "\e[48;5;172m Install traitlets \e[0m"
 #sudo -H python3 -m pip install git+https://github.com/ipython/traitlets@master
@@ -83,7 +91,7 @@ jupyter lab --generate-config
 python3 -c "from notebook.auth.security import set_password; set_password('$password', '$HOME/.jupyter/jupyter_notebook_config.json')"
 
 # fix for Traitlet permission error
-sudo chown -R jetson:jetson ~/.local/share/
+sudo chown -R $USER:$USER ~/.local/share/
 
 # Install jetcard
 echo "\e[44m Install jetcard \e[0m"
@@ -118,46 +126,23 @@ else
 	echo "Swapfile already exists"
 fi
 
-# Install TensorFlow models repository
-echo "\e[48;5;202m Install TensorFlow models repository \e[0m"
-cd
-url="https://github.com/tensorflow/models"
-tf_models_dir="TF-models"
-if [ ! -d "$tf_models_dir" ] ; then
-	git clone $url $tf_models_dir
-	cd "$tf_models_dir"/research
-	git checkout 5f4d34fc
-	wget -O protobuf.zip https://github.com/protocolbuffers/protobuf/releases/download/v3.7.1/protoc-3.7.1-linux-aarch_64.zip
-	# wget -O protobuf.zip https://github.com/protocolbuffers/protobuf/releases/download/v3.7.1/protoc-3.7.1-linux-x86_64.zip
-	unzip protobuf.zip
-	./bin/protoc object_detection/protos/*.proto --python_out=.
-	sudo -H python3 setup.py install
-	cd slim
-	sudo -H python3 setup.py install
-fi
-
-# Disable syslog to prevent large log files from collecting
-#sudo service rsyslog stop
-#sudo systemctl disable rsyslog
-
-# Install jupyter_clickable_image_widget
-echo "\e[42m Install jupyter_clickable_image_widget \e[0m"
-cd
-sudo apt-get install libssl1.0-dev
-#sudo apt-get install nodejs-dev node-gyp libssl1.0-dev
-#sudo apt-get install npm
-git clone https://github.com/jaybdub/jupyter_clickable_image_widget
-cd jupyter_clickable_image_widget
-git checkout no_typescript
-sudo -H pip3 install -e .
-sudo jupyter labextension install js
-sudo jupyter lab build
-
-
 # Install remaining dependencies for projects
 echo "\e[104m Install remaining dependencies for projects \e[0m"
 sudo apt-get install python-setuptools
 
+# Install DonkeyCar
+# reference: http://docs.donkeycar.com/guide/robot_sbc/setup_jetson_nano/
+echo "\e[104m Install DonkeyCar \e[0m"
+pip3 install virtualenv
+python3 -m virtualenv -p python3 env --system-site-packages
+echo "source env/bin/activate" >> ~/.zshrc
+source ~/.zshrc
+mkdir -p ~/projects; cd ~/projects
+git clone https://github.com/caipeide/donkeycar.git
+cd donkeycar
+git checkout 88b5cbaa8284728204d98dfd91e6a6b6c733598d
+pip install -e .
+pip install adafruit-pca9685
 
 echo "\e[42m All done! \e[0m"
 
