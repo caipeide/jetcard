@@ -26,14 +26,6 @@ sudo -H pip3 install --upgrade pip
 sudo -H pip3 install flask
 sudo -H pip3 install --upgrade numpy
 
-# Install torch2trt for model acceleration
-echo "\e[100m Install torch2trt for model acceleration \e[0m"
-cd
-git clone https://github.com/NVIDIA-AI-IOT/torch2trt 
-cd torch2trt 
-sudo python3 setup.py install
-cd ../
-
 # Install ohmyzsh and zsh-autosuggestions
 echo "\e[100m Install ohmyzsh \e[0m"
 sudo apt install zsh
@@ -73,6 +65,14 @@ git checkout tags/v0.7.0
 sudo -H python3 setup.py install
 cd  ../
 pip install 'pillow<7'
+
+# Install torch2trt for model acceleration
+echo "\e[100m Install torch2trt for model acceleration \e[0m"
+cd
+git clone https://github.com/NVIDIA-AI-IOT/torch2trt 
+cd torch2trt 
+sudo python3 setup.py install
+cd ../
 
 # Install traitlets (master, to support the unlink() method)
 echo "\e[48;5;172m Install traitlets \e[0m"
@@ -144,7 +144,7 @@ git checkout 88b5cbaa8284728204d98dfd91e6a6b6c733598d
 pip install -e .
 pip install adafruit-pca9685
 
-echo "\e[42m All done! \e[0m"
+echo "\e[42m All done! Now you should reboot the system. The ip address and other information will show on the display :) \e[0m"
 
 #record the time this script ends
 date
