@@ -32,8 +32,6 @@ sudo apt install -y zsh
 y | sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 sed -i "71c plugins=(git zsh-autosuggestions)" ~/.zshrc
-chsh -s /bin/zsh
-
 
 # Tune the IMX219 camera
 # reference: https://www.waveshare.com/wiki/IMX219-160_Camera
@@ -138,7 +136,7 @@ pip3 install virtualenv
 python3 -m virtualenv -p python3 env --system-site-packages
 echo "source ~/env/bin/activate" >> ~/.bashrc
 echo "source ~/env/bin/activate" >> ~/.zshrc
-gnome-terminal -- bash -c "sh donkeycar.sh; exec bash;"
+gnome-terminal -- bash -c "sh ./donkeycar.sh; exec bash;"
 
 echo "\e[42m Install the donkeycar depencency in a new terminal... \e[0m"
 #record the time this script ends
