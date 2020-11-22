@@ -136,6 +136,7 @@ pip3 install virtualenv
 python3 -m virtualenv -p python3 env --system-site-packages
 echo "source ~/env/bin/activate" >> ~/.bashrc
 echo "source ~/env/bin/activate" >> ~/.zshrc
+cd $DIR
 gnome-terminal -- bash -c "sh ./donkeycar.sh; exec bash;"
 
 echo "\e[42m Install the donkeycar depencency in a new terminal... \e[0m"
