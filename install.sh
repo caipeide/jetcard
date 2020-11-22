@@ -28,7 +28,7 @@ sudo -H pip3 install --upgrade numpy
 
 # Install ohmyzsh and zsh-autosuggestions
 echo "\e[100m Install ohmyzsh \e[0m"
-sudo apt install zsh
+sudo apt install -y zsh
 yes Yes y | sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 sed -i "$[ 71 ]c plugins=(git zsh-autosuggestions)" ~/.zshrc
