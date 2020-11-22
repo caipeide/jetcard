@@ -29,9 +29,10 @@ sudo -H pip3 install --upgrade numpy
 # Install ohmyzsh and zsh-autosuggestions
 echo "\e[100m Install ohmyzsh \e[0m"
 sudo apt install -y zsh
-yes Yes y | sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+y | sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 sed -i "71c plugins=(git zsh-autosuggestions)" ~/.zshrc
+chsh -s /bin/zsh
 
 
 # Tune the IMX219 camera
@@ -132,20 +133,14 @@ sudo apt-get install python-setuptools
 
 # Install DonkeyCar
 # reference: http://docs.donkeycar.com/guide/robot_sbc/setup_jetson_nano/
-echo "\e[104m Install DonkeyCar \e[0m"
+echo "\e[104m Setting up python virtual environment \e[0m"
 pip3 install virtualenv
 python3 -m virtualenv -p python3 env --system-site-packages
-echo "source env/bin/activate" >> ~/.zshrc
-source ~/.zshrc
-mkdir -p ~/projects; cd ~/projects
-git clone https://github.com/caipeide/donkeycar.git
-cd donkeycar
-git checkout 88b5cbaa8284728204d98dfd91e6a6b6c733598d
-pip install -e .
-pip install adafruit-pca9685
+echo "source ~/env/bin/activate" >> ~/.bashrc
+echo "source ~/env/bin/activate" >> ~/.zshrc
+gnome-terminal -- bash -c "sh donkeycar.sh; exec bash;"
 
-echo "\e[42m All done! Now you should reboot the system. The ip address and other information will show on the display :) \e[0m"
-
+echo "\e[42m Install the donkeycar depencency in a new terminal... \e[0m"
 #record the time this script ends
 date
 
