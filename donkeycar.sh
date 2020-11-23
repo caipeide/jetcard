@@ -5,7 +5,7 @@ cd
 mkdir -p ~/projects; cd ~/projects
 git clone https://github.com/caipeide/donkeycar.git
 cd donkeycar
-git checkout 88b5cbaa8284728204d98dfd91e6a6b6c733598d
+# git checkout 88b5cbaa8284728204d98dfd91e6a6b6c733598d
 pip install -e .
 pip install adafruit-pca9685
 
