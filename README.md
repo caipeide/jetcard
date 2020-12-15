@@ -1,6 +1,11 @@
 # JetCard
 
-JetCard is a system configuration that makes it easy to get started with AI on Jetson Nano. This repository is built to support the [Autorace project](https://github.com/caipeide/autorace) with application on *autonomous RC-Car racing competitoin*. It comes pre-loaded with:
+JetCard is a system configuration that makes it easy to get started with AI on Jetson Nano. This repository is built to support the [Autorace project](https://github.com/caipeide/autorace) with application on *autonomous RC-Car racing competitoin*. 
+
+Matainers: [Peide Cai](https://www.ram-lab.com/people/#mr-peide-cai) &lt;pcaiaa@connect.ust.hk&gt;
+
+## Features
+JetCard comes pre-loaded with:
 
 * A Jupyter Lab server that starts on boot for easy web programming
 * A script to display the Jetson Nano's IP address, CPU & GPU usage, battery life, charging status, etc.
@@ -14,12 +19,14 @@ After configuring your system using JetCard, you can get started prototyping AI 
 After you install [JetPack 4.4](https://developer.nvidia.com/jetpack-sdk-44-archive) on the SD card, boot the system (Ubuntu 18.04) and open a terminal by typing `Ctrl+Alt+T`, and then do the followings to use JetCard to quickly configure your system:
 
 ```console
-cd ~
-git clone https://github.com/caipeide/jetcard.git
-cd jetcard
-sh ./install.sh <password>
+$ cd ~
+$ git clone https://github.com/caipeide/jetcard.git
+$ cd jetcard
+$ sh ./install.sh <password>
 ```
-The whole installation will cost about 40 min. After that the script will ask you to reboot. Take a look at the ip address shown on the display (10.79.157.13).
+![Install](images/install.gif)
+
+The whole installation will cost about 40 min. After that the script will ask you to reboot. Take a look at the ip address shown on the display (10.79.157.13 in this case).
 
 ![Display on the RC-Car](images/display.jpg)
 
