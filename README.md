@@ -10,7 +10,7 @@ JetCard comes pre-loaded with:
 * A Jupyter Lab server that starts on boot for easy web programming
 * A script to display the Jetson Nano's IP address, CPU & GPU usage, battery life, charging status, etc.
 * The popular deep learning frameworks [PyTorch](https://pytorch.org/) (version: 1.6)
-* A library to drive RC-Cars [Donkeycar](https://github.com/caipeide/donkeycar)
+* A Python3 library to drive RC-Cars [Donkeycar](https://github.com/caipeide/donkeycar)
 
 After configuring your system using JetCard, you can get started prototyping AI projects from your web browser in Python3.
 
