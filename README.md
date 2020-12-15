@@ -20,7 +20,7 @@ After you install [JetPack 4.4](https://developer.nvidia.com/jetpack-sdk-44-arch
 
 ```console
 $ cd ~
-$ git clone https://github.com/caipeide/jetcard.git
+$ git clone https://github.com/caipeide/jetcard
 $ cd jetcard
 $ sh ./install.sh <password>
 ```
