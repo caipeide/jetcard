@@ -83,8 +83,8 @@ echo "\e[48;5;172m Install Jupyter Lab \e[0m"
 sudo apt install -y curl
 curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
 sudo apt install -y nodejs libffi-dev
-sudo -H pip3 install jupyter jupyterlab
-sudo -H jupyter labextension install @jupyter-widgets/jupyterlab-manager
+sudo -H pip3 install jupyter jupyterlab==2.2.9
+# sudo -H jupyter labextension install @jupyter-widgets/jupyterlab-manager
 
 jupyter lab --generate-config
 python3 -c "from notebook.auth.security import set_password; set_password('$password', '$HOME/.jupyter/jupyter_notebook_config.json')"
